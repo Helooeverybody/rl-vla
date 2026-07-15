@@ -1,9 +1,20 @@
 """
 SyncVectorEnv : run N copies of an env in lockstep to decorrelation.
 
-On-policy spend most of their time collecting data. Stepping N independent
-environments copies per iteration gives N transitions per policy forward pass
+In Deep RL, data collection is the bottleneck.
 
+Neural Network Inefficiency: Neural networks are designed to process data 
+in batches (e.g., 32 or 64 images at once) using parallel GPU computation. 
+If an agent plays only one game at a time, it sends inputs to the neural network 
+one by one (batch size of 1), which is incredibly slow.
+
+Correlated Data: If you take 32 consecutive frames from a single game of 
+Mario, those frames look almost identical. Training a neural network on 
+highly correlated data makes learning unstable.
+
+The Solution: We run N completely independent copies of the game at the exact 
+same time. The neural network predicts N actions in a single forward pass,
+ and the environments process those N actions simultaneously. This speeds up data collection and guarantees that the batch of data is diverse (decorrelated).
 """
 
 from collections.abc import Callable 
@@ -32,6 +43,7 @@ class SyncVectorEnv:
             for i, env in enumerate(self.envs)
         ]
         return np.stack(obs).astype(np.float32)
+        
     def step(self, actions: np.ndarray):
         obs = np.zeros((self.num_envs, self.obs_dim), dtype = np.float32)
         final_obs = np.zeros((self.num_envs, self.obs_dim), dtype = np.float32)
@@ -40,10 +52,12 @@ class SyncVectorEnv:
         truncateds = np.zeros((self.num_envs,), dtype = np.bool_)
 
         for i, env in enumerate(self.envs):
-            obs[i], rewards[i], terminateds[i], truncateds[i] = env.step(actions[i])
+            o, rewards[i], terminateds[i], truncateds[i] = env.step(actions[i])
             if terminateds[i] or truncateds[i]:
-                final_obs[i] = obs[i].copy()
-                obs[i] = env.reset(seed = None if seed is None else seed + i)
+                final_obs[i] = o
+                o = env.reset()
+            obs[i] = o
+
         return obs, rewards, terminateds, truncateds, final_obs
 
     
