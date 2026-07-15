@@ -52,7 +52,7 @@ class GridWorldEnv(Env):
         self.seed(seed)
         self._elapsed_steps = 0
         if self.random_start:
-            self.pos = self.rng.choice(self.free_cells)
+            self.pos = self.free_cells[self.rng.integers(len(self.free_cells))]
         else:
             self.pos = self.start
         return self._obs()

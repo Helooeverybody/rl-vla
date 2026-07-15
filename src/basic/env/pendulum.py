@@ -49,7 +49,7 @@ class PendulumEnv(Env):
 
     def reset(self, seed: int | None = None) -> np.ndarray:
         self.seed(seed)
-        self.theta = self.rng.uniform(low = np.pi, high = np.pi)
+        self.theta = self.rng.uniform(low = -np.pi, high = np.pi)
         self.theta_dot = self.rng.uniform(low = -1.0, high = 1.0)
         self._elapsed_steps = 0
         return self._obs()

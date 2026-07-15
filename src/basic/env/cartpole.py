@@ -40,7 +40,7 @@ class CartPoleEnv(Env):
 
     def reset(self, seed: int | None = None) -> np.ndarray:
         self.seed(seed)
-        self.state = self.rng.uniform(low = -0.05, high = 0.05, size = (4,), dtype=np.float32)
+        self.state = self.rng.uniform(low = -0.05, high = 0.05, size = (4,)).astype(np.float32)
         self._elapsed_steps = 0
         return self.state
 
@@ -55,8 +55,8 @@ class CartPoleEnv(Env):
 
 
         temp = (force + pole_mass_length * theta_dot ** 2 * sin_th) / total_mass
-        theta_acc = (self.GRAVITY * sin_th - cos_th * temp) / (
-            self.LENGTH * (4.0 / 3.0 - self.MASS_POLE * cos_th ** 2 / total_mass))
+        theta_acc = (self.G * sin_th - cos_th * temp) / (
+            self.L * (4.0 / 3.0 - self.M_POLE * cos_th ** 2 / total_mass))
         x_acc = temp - pole_mass_length * theta_acc * cos_th / total_mass
 
         # Semi-implicit Euler integration.

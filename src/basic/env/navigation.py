@@ -14,7 +14,7 @@ As in GridWorld, episodes start from a random free
 to avoid 20 the hole region and then never finds the goal at all
 """
 
-import numyp as np 
+import numpy as np
 from src.basic.env.base import Env
 
 class NavigationEnv(Env):

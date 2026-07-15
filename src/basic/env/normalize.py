@@ -46,9 +46,11 @@ class NormalizeObservation:
         self.is_vector = hasattr(env, "num_envs")
 
         # Mirror the env interface 
+        # Discrete envs lack action_dim/action_low/high; continuous envs lack
+        # n_actions. Default missing attributes to None instead of crashing.
         for attr in ("obs_dim", "action_type", "n_actions", "action_dim",
                      "action_low", "action_high", "max_episode_steps"):
-            setattr(self, attr, getattr(env, attr))
+            setattr(self, attr, getattr(env, attr, None))
         if self.is_vector:
             self.num_envs = env.num_envs
     
