@@ -56,9 +56,7 @@ ALL_ENV_NAMES = sorted(ENVS)
 SEED = 12345
 
 
-# --------------------------------------------------------------------------- #
-# Helpers
-# --------------------------------------------------------------------------- #
+
 def sample_action(env, rng):
     """Return a random valid action for either action type."""
     if env.action_type == "discrete":
