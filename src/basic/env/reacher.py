@@ -18,7 +18,7 @@ Truncated:       after 100 steps.
 import numpy as np 
 from src.basic.env.base import Env 
 
-class Reacher(Env):
+class ReacherEnv(Env):
     action_type = "continuous"
     action_dim = 2 
     obs_dim = 6 

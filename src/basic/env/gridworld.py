@@ -21,7 +21,7 @@ Observation: a one-hot vector of length 25 marking the agent’s cell.
 import numpy as np 
 from src.basic.env.base import Env
 
-class GridWorld(Env):
+class GridWorldEnv(Env):
     action_type = "discrete"
     n_actions = 4
     max_episode_steps = 100 

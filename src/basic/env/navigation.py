@@ -17,7 +17,7 @@ to avoid 20 the hole region and then never finds the goal at all
 import numyp as np 
 from src.basic.env.base import Env
 
-class Navigation(Env):
+class NavigationEnv(Env):
     action_type = "continuous"
     action_dim = 2 
     obs_dim = 4 
@@ -66,7 +66,7 @@ class Navigation(Env):
         self.agent = np.clip(self.agent + delta, 0.0, 1.0).astype(np.float32)
         if np.linalg.norm(self.agent - self.goal) < self.goal_radius:
             return self._obs(), 1.0, True, False
-            
+
         for hole in self.holes:
             if np.linalg.norm(self.agent - hole) < self.hole_radius:
                 return self._obs(), -1.0, True, False
