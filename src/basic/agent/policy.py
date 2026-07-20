@@ -102,7 +102,7 @@ class GaussianPolicy(nn.Module):
 #-----------
 
 class DeterministicPolicy(nn.Module):
-    def __init__(self, obs_dim: int, action_dim: int, hidden = (256, 256)):
+    def __init__(self, obs_dim: int, action_dim: int, action_low: float, action_high: float, hidden = (256, 256)):
         super().__init__()
         self.net = mlp([obs_dim, *hidden, action_dim], activation = nn.ReLU, output_activation = nn.Tanh)
         low = torch.as_tensor(np.asarray(action_low), dtype = torch.float32)
